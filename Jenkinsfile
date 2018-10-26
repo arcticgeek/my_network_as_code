@@ -1,7 +1,8 @@
 node {
 
     stage ('Checkout Repo') {
-        // comment
+        deleteDir()
+        checkout scm
     }
 
     stage ('Render Confs') {
