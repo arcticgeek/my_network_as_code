@@ -6,7 +6,7 @@ node {
     }
 
     stage ('Render Confs') {
-        // comment
+        sh 'ansible-playbook gen_configs.yaml'
     }
 
     stage ('Unit testing') {
