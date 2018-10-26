@@ -1,0 +1,27 @@
+---
+- name: Gen IOS-XE Router Configs
+  connection: local
+  hosts: cisco-ios-xe-routers
+  gather_facts: no
+  tasks:
+    - template:
+        src=templates/cisco-ios-xe-router.j2
+        dest=configs/{{ inventory_hostname }}
+
+- name: Generate NX-OS Configs
+  connection: local
+  hosts: cisco-nxos
+  gather_facts: no
+  tasks:
+    - template:
+        src=templates/cisco-nxos.j2
+        dest=configs/{{ inventory_hostname }}
+
+- name: Generate ASA Configs
+  connection: local
+  hosts: cisco-asa
+  gather_facts: no
+  tasks:
+    - template:
+        src=templates/cisco-asa.j2
+        dest=configs/{{ inventory_hostname }}
