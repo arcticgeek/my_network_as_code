@@ -1,4 +1,13 @@
 ---
+- name: prepare
+  connection: local
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - file:
+        path: configs/
+        state: directory
+
 - name: Gen IOS-XE Router Configs
   connection: local
   hosts: cisco-ios-xe-routers
