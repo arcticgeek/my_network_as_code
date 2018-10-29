@@ -5,12 +5,16 @@ node {
         checkout scm
     }
 
+    stage ('validate playbook to render configurations') {
+        sh 'ansible-playbook gen_configs.yaml --syntax-check'
+    }
+
     stage ('Render Confs') {
         sh 'ansible-playbook gen_configs.yaml'
     }
 
     stage ('Unit testing') {
-        // comment
+        sh 'ansible-playbook deploy_configurations.yaml --syntax-check'
     }
 
     stage ('Deploy confs to DEV') {
