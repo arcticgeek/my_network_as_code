@@ -27,6 +27,7 @@ node {
 
     stage ('Unit testing') {
         sh 'ansible-playbook deploy_configurations.yaml -e "ansible_python_interpreter=jenkins_build/bin/python" --syntax-check'
+        sh 'ansible-playbook deploy_configurations.yaml -e "ansible_python_interpreter=jenkins_build/bin/python" --syntax-check'
     }
 
     stage ('Deploy confs to DEV') {
@@ -34,7 +35,7 @@ node {
     }
 
     stage ('func/inte testing') {
-        // comment
+        sh 'ansible-playbook validate_configs.yaml -e "ansible_python_interpreter=jenkins_build/bin/python"'
     }
 
     stage ('promote configs to PROD') {
