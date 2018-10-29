@@ -5,19 +5,7 @@ node {
         checkout scm
     }
 
-    stage ('validate playbook to render configurations') {
-        sh 'ansible-playbook gen_configs.yaml --syntax-check'
-    }
-
-    stage ('Render Confs') {
-        sh 'ansible-playbook gen_configs.yaml'
-    }
-
-    stage ('Unit testing') {
-        sh 'ansible-playbook deploy_configurations.yaml --syntax-check'
-    }
-
-    stage ('Deploy confs to DEV') {
+    stage ('setup environment') {
         sh 'python3 -m venv jenkins_build'
         sh 'jenkins_build/bin/python -m pip install setuptools wheel virtualenv --upgrade'
         sh 'jenkins_build/bin/python -m pip install -r requirements.txt'
@@ -27,6 +15,21 @@ node {
         sh '''sed -i -e 's/\\/usr\\/local/jenkins_build/g' ansible.cfg'''
         sh '''sed -i -e 's/dist-/site-/g' ansible.cfg'''
         sh '''sed -i -e 's/\\/usr\\/bin/jenkins_build\\/bin/g' ansible.cfg'''
+    }
+
+    stage ('validate playbook to render configurations') {
+        sh 'ansible-playbook gen_configs.yaml -e "ansible_python_interpreter=jenkins_build/bin/python" --syntax-check'
+    }
+
+    stage ('Render Confs') {
+        sh 'ansible-playbook gen_configs.yaml -e "ansible_python_interpreter=jenkins_build/bin/python"'
+    }
+
+    stage ('Unit testing') {
+        sh 'ansible-playbook deploy_configurations.yaml -e "ansible_python_interpreter=jenkins_build/bin/python" --syntax-check'
+    }
+
+    stage ('Deploy confs to DEV') {
         sh 'ansible-playbook deploy_configurations.yaml -e "ansible_python_interpreter=jenkins_build/bin/python"'
     }
 
